@@ -73,6 +73,30 @@ export const I18N: Record<'en' | 'ar', TranslationStrings> = {
   }
 };
 
+/**
+ * Converts item names to a clean URL-safe slug.
+ * 1. Lowercase
+ * 2. Remove parentheses text like (UR)
+ * 3. Trim
+ * 4. Replace spaces/symbols with -
+ * 5. Collapse multiple hyphens
+ */
+export function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s*\([^)]*\)/g, '') // remove content in parentheses like (UR), (SR)
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')   // replace non-alphanumeric with hyphens
+    .replace(/-+/g, '-')          // collapse multiple hyphens
+    .replace(/^-|-$/g, '');       // trim hyphens from start/end
+}
+
+export function getItemImageSrc(itemName: string): string {
+  return `images/items/${slugify(itemName)}.png`;
+}
+
+export const DEFAULT_IMAGE = 'images/items/default.png';
+
 export function getItemCategory(itemName: string): Category {
   if (!itemName) return Category.ALL;
   const k = itemName.toLowerCase();
